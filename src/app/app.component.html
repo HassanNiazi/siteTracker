@@ -1,0 +1,41 @@
+<xlsx-file-upload *ngIf="!showTemp" style="width: 100%" (uploadedXls)="xlsxUploaded($event)"> {{ uploaderContent | async }} </xlsx-file-upload>
+<br>
+<div *ngIf="!showTemp" style="display: block">
+  <strong>Zoom Value </strong>: {{zoom}}
+  <input style="position: absolute;margin-top: -4px;" type="range" min="1" max="25" [(ngModel)]="zoom" value="10" class="slider">
+</div>
+<br>
+
+<div *ngIf="!showTemp" id="capture">
+
+  <strong>  Map Type</strong> <select [(ngModel)]="type">
+    <option value="roadmap">Road Map</option>
+    <option value="terrain">Terrian</option>
+    <option value="satellite">Satellite</option>
+    <option value="hybrid">Hybrid</option>
+  </select>
+  <button style="width:96%;height:10vh;margin:2%;" (click)="buttonClicked()">Process Images</button>
+
+</div>
+<div *ngIf="!showTemp">
+  <ng2-map style="height: 45vh;width:100%" zoom="{{zoom}}" mapTypeId="{{type}}" center="Islamabad, Pakistan">
+    <marker *ngFor="let pos of positions" [position]="pos"></marker>
+  </ng2-map>
+</div>
+
+<!-- Add center to comma sepratedlat lngs -->
+<div>
+  <div *ngFor="let pos of _positions">
+    <div *ngIf="!showTemp" style="width:min-content;font-size: 20px" id="images{{pos.sr}}">
+      <span><strong>Serial No</strong> : {{pos.sr}}</span> &nbsp;&nbsp;
+      <span><strong>Latitude</strong> : {{pos.lat}}</span> &nbsp;&nbsp;
+      <span><strong>Longitude</strong> : {{pos.lng}}</span> &nbsp;&nbsp;
+      <span><strong>Name of Retail Outlet</strong> : {{pos.ro}}</span>&nbsp;&nbsp;
+      <span><strong>Zone</strong> : {{pos.zone}}</span>&nbsp;&nbsp;
+      <span><strong>Dealer</strong> : {{pos.dealer}}</span>&nbsp;&nbsp;
+      <br> <span><strong>Address</strong> : {{pos.address}}</span>
+      <img crossOrigin="anonymous" name="{{pos.ro}}" src="https://maps.googleapis.com/maps/api/staticmap?center={{pos.lng}},{{pos.lat}}&format=jpg&zoom={{zoom}}&size=1080x1920&scale=2&maptype={{type}}&markers=color:red%7Clabel:{{pos.ro}}%7C{{pos.lng}},{{pos.lat}}
+     &key=AIzaSyCBXYNKCvZJePmJg4-SMcDsTpTb30qw58g" alt="" srcset="">
+    </div>
+  </div>
+</div>
